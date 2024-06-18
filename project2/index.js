@@ -43,9 +43,28 @@ server
             }
             userDB.push(newUser);
             fs.createReadStream("login.html").pipe(res);
-    
+             });
+         } else if (method === "POST" && requestUrl === "/login/submit") {
+            let loginInput = "";
+            req.on("data", (dataChunk) => {
+                loginInput += dataChunk;
+            });
+        req.on("end" , () => {
+            const loginInputParams = new URLSearchParams(loginInput);
+            const username = loginInputParams.get("username");
+            const password = loginInputParams.get("password");
+            const user = userDB.find(
+                user => user.username === username && user.password === password
+            );
+
+            if (user) {
+                res.end(`Welcome, ${user.fname} ${user.lname}! You have successfully logged in.`);
+            } else {
+                res.end("Invalid username or password. Please try again.");
+            }
         });
     }
+
 })
 .listen(port);
 

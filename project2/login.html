@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <link rel="stylesheet" type="text/css" href="login.css">
+        <title>Signup</title>
     </head>
     <body>
-        <form method="GET" action="/login/submit">
-            <label>Username</label>
+        <div class="container">
+        <h1>Login</h1>
+        <form method="POST" action="/login/submit">
+            <label>Username:</label>
             <input type="text" name="username">
-            <label>Password</label>
+            <label>Password:</label>
             <input type="password" name="password">
             <input type="submit">
         </form>
+    </div>
     </body>
 </html>
