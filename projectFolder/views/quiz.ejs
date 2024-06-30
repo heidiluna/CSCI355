@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz</title>
+</head>
+<body>
+  <h1>Quiz</h1>
+<!--Are there questions to select from-->
+  <% if (questions && questions.length > 0) { %>
+    <div id="question-container">
+      <div class="question">
+        <h2>Question <%= currentQuestionIndex + 1 %> of <%= questions.length %>:</h2>
+        <p><%= questions[currentQuestionIndex].question %></p>
+
+          <!--Tells user if they ansered the previous question correctly or not-->
+          <% if (typeof feedback !== 'undefined') { %>
+            <p><%= feedback %></p>
+          <% } %>
+
+        <form action="/answer" method="POST">
+          <!--Checks the kind of question it is first-->
+          <% if (questions[currentQuestionIndex].type === 'multiple') { %>
+          <!--Current question will be assigned the var ques-->
+            <% const question = questions[currentQuestionIndex]; %>
+            <!--Array of all options to chose from-->
+            <% const answers = [...question.incorrect_answers, question.correct_answer]; %>
+            <!--Correct answer is not always in the same place-->
+            <% answers.sort(() => Math.random() - 0.5); %>
+            <!--Iterates through each answer-->
+            <% answers.forEach((answer, index) => { %>
+            <!--Button for each option is generated-->
+              <input type="radio" id="answer<%= index %>" name="answer" value="<%= answer %>">
+              <label for="answer<%= index %>"><%= answer %></label><br>
+            <% }); %>
+          <!--Question is not MC then....-->
+          <% } else { %>
+            <input type="radio" id="true" name="answer" value="True">
+            <label for="true">True</label><br>
+            <input type="radio" id="false" name="answer" value="False">
+            <label for="false">False</label><br>
+          <% } %>
+          <!--Correct Answer, current question index, scorr\ and entire set of questions are included as well-->
+          <input type="hidden" name="correct_answer" value="<%= questions[currentQuestionIndex].correct_answer %>">
+          <input type="hidden" name="currentQuestionIndex" value="<%= currentQuestionIndex %>">
+          <input type="hidden" name="score" value="<%= score %>">
+          <input type="hidden" name="questions" value='<%= JSON.stringify(questions) %>'>
+          <!--User can submit the anser they chose-->
+          <button type="submit">Submit Answer</button>
+        </form>
+      </div>
+    </div>
+  <% }%>
+  </body>
+</html>
+
